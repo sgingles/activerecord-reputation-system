@@ -82,9 +82,7 @@ module ReputationSystem
       end
 
       def get_scoped_reputation_name(class_name, reputation_name, scope)
-      Rails.logger.info("get_scoped_reputation_name")
-      Rails.logger.info(class_name)
-        raise ArgumentError, "#{reputation_name.to_s} is not defined for #{class_name}" unless has_reputation_for?(class_name, reputation_name)
+       # raise ArgumentError, "#{reputation_name.to_s} is not defined for #{class_name}" unless has_reputation_for?(class_name, reputation_name)
         scope = scope.to_sym if scope
         validate_scope_necessity(class_name, reputation_name, scope)
         validate_scope_existence(class_name, reputation_name, scope)
