@@ -29,16 +29,16 @@ class RSEvaluation < ActiveRecord::Base
     RSEvaluation.find(:first,
                       :conditions => {:reputation_name => reputation_name.to_s,
                                       :source_id => source.id,
-                                      :source_type => source.class.name,
+                                      :source_type => source.class.base_class.name,
                                       :target_id => target.id,
-                                      :target_type => target.class.name
+                                      :target_type => target.class.base_class.name
                                       })
   end
 
   def self.create_evaluation(reputation_name, value, source, target)
     RSEvaluation.create!(:reputation_name => reputation_name.to_s, :value => value,
-                         :source_id => source.id, :source_type => source.class.name,
-                         :target_id => target.id, :target_type => target.class.name)
+                         :source_id => source.id, :source_type => source.class.base_class.name,
+                         :target_id => target.id, :target_type => target.class.base_class.name)
   end
 
   protected
