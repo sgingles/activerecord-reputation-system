@@ -64,13 +64,13 @@ module ReputationSystem
 
     protected
       def find_srn_and_evaluation(reputation_name, source, scope)
-        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.name, reputation_name, scope)
+        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.base_class.name, reputation_name, scope)
         evaluation = RSEvaluation.find_by_reputation_name_and_source_and_target(srn, source, self)
         return srn, evaluation
       end
 
       def find_srn_and_evaluation!(reputation_name, source, scope)
-        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.name, reputation_name, scope)
+        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.base_class.name, reputation_name, scope)
         evaluation = find_evaluation!(reputation_name, srn, source)
         return srn, evaluation
       end
@@ -82,7 +82,7 @@ module ReputationSystem
       end
 
       def delete_evaluation_without_validation(srn, evaluation)
-        process = ReputationSystem::Network.get_reputation_def(self.class.name, srn)[:aggregated_by]
+        process = ReputationSystem::Network.get_reputation_def(self.class.base_class.name, srn)[:aggregated_by]
         oldValue = evaluation.value
         evaluation.value = process == :product ? 1 : 0
         rep = RSReputation.find_by_reputation_name_and_target(srn, self)
@@ -92,7 +92,7 @@ module ReputationSystem
 
       def change_evaluation_value_by(reputation_name, value, source, *args)
         scope = args.first
-        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.name, reputation_name, scope)
+        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.base_class.name, reputation_name, scope)
         evaluation = RSEvaluation.find_by_reputation_name_and_source_and_target(srn, source, self)
         if evaluation.nil?
           self.add_evaluation(reputation_name, value, source, scope)
