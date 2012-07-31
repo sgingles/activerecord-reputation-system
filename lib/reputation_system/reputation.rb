@@ -53,9 +53,9 @@ module ReputationSystem
 
     protected
       def find_reputation(reputation_name, scope)
-        raise ArgumentError, "#{reputation_name} is not valid" if !self.class.has_reputation_for?(reputation_name)
-        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.name, reputation_name, scope)
-        process = ReputationSystem::Network.get_reputation_def(self.class.name, srn)[:aggregated_by]
+        raise ArgumentError, "#{reputation_name} is not valid" if !self.class.base_class.has_reputation_for?(reputation_name)
+        srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.base_class.name, reputation_name, scope)
+        process = ReputationSystem::Network.get_reputation_def(self.class.base_class.name, srn)[:aggregated_by]
         RSReputation.find_or_create_reputation(srn, self, process)
       end
   end
