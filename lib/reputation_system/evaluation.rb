@@ -37,7 +37,7 @@ module ReputationSystem
 
     def add_or_update_evaluation(reputation_name, value, source, *args)
       srn, evaluation = find_srn_and_evaluation(reputation_name, source, args.first)
-      if RSEvaluation.exists? :reputation_name => srn, :source_id => source.id, :source_type => source.class.name, :target_id => self.id, :target_type => self.class.name
+      if RSEvaluation.exists? :reputation_name => srn, :source_id => source.id, :source_type => source.class.base_class.name, :target_id => self.id, :target_type => self.class.name
         self.update_evaluation(reputation_name, value, source, *args)
       else
         self.add_evaluation(reputation_name, value, source, *args)
@@ -77,7 +77,7 @@ module ReputationSystem
 
       def find_evaluation!(reputation_name, srn, source)
         evaluation = RSEvaluation.find_by_reputation_name_and_source_and_target(srn, source, self)
-        raise ArgumentError, "Given instance of #{source.class.name} has not evaluated #{reputation_name} of the instance of #{self.class.name} yet." unless evaluation
+        raise ArgumentError, "Given instance of #{source.class.base_class.name} has not evaluated #{reputation_name} of the instance of #{self.class.name} yet." unless evaluation
         evaluation
       end
 
