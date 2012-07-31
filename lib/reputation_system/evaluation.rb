@@ -18,8 +18,8 @@ module ReputationSystem
   module Evaluation
     def add_evaluation(reputation_name, value, source, *args)
       scope = args.first
-      srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.name, reputation_name, scope)
-      process = ReputationSystem::Network.get_reputation_def(self.class.name, srn)[:aggregated_by]
+      srn = ReputationSystem::Network.get_scoped_reputation_name(self.class.base_class.name, reputation_name, scope)
+      process = ReputationSystem::Network.get_reputation_def(self.class.base_class.name, srn)[:aggregated_by]
       evaluation = RSEvaluation.create_evaluation(srn, value, source, self)
       rep = RSReputation.find_or_create_reputation(srn, self, process)
       RSReputation.update_reputation_value_with_new_source(rep, evaluation, 1, process)
@@ -30,7 +30,7 @@ module ReputationSystem
       oldValue = evaluation.value
       evaluation.value = value
       evaluation.save!
-      process = ReputationSystem::Network.get_reputation_def(self.class.name, srn)[:aggregated_by]
+      process = ReputationSystem::Network.get_reputation_def(self.class.base_class.name, srn)[:aggregated_by]
       rep = RSReputation.find_by_reputation_name_and_target(srn, self)
       RSReputation.update_reputation_value_with_updated_source(rep, evaluation, oldValue, 1, process)
     end
