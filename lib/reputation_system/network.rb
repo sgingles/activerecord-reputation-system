@@ -18,6 +18,7 @@ module ReputationSystem
   class Network
     class << self
       def has_reputation_for?(class_name, reputation_name)
+      logger.info(class_name)
         reputation_defs = get_reputation_defs(class_name)
         reputation_defs[reputation_name.to_sym] && reputation_defs[reputation_name.to_sym][:source]
       end
